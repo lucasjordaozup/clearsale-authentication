@@ -37,6 +37,12 @@ dependencies {
     //redis module
     implementation("io.micronaut.redis:micronaut-redis-lettuce:5.0.0")
 
+    implementation("com.squareup.okhttp:okhttp:2.7.5")
+    implementation("com.squareup.okhttp:okhttp-urlconnection:2.7.5")
+
+    //to federate serialization
+    implementation("com.google.code.gson:gson:2.8.8")
+
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 
 }

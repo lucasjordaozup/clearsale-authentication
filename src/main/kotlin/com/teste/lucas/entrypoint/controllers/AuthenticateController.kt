@@ -1,7 +1,6 @@
 package com.teste.lucas.entrypoint.controllers
 
-import com.teste.lucas.core.model.AuthenticateModel
-import com.teste.lucas.core.port.AuthenticateServicePort
+import com.teste.lucas.infrastructure.clients.ExternalClient
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
@@ -11,15 +10,17 @@ import org.slf4j.LoggerFactory
 
 @Controller("/auth")
 class AuthenticateController(
-    private val service: AuthenticateServicePort
+//    private val service: AuthenticateServicePort
+private val externalClient: ExternalClient
 ) {
 
     var log = LoggerFactory.getLogger(AuthenticateController::class.toString())
 
     @Post("/login")
-    fun login(): HttpResponse<*>{
+    fun authenticate(): HttpResponse<*>{
         log.info("Iniciando o controller")
-        return HttpResponse.ok(service.authenticate(AuthenticateModel("Teste", "12234")))
+        externalClient.order()
+        return HttpResponse.ok("ook")
     }
 
 }

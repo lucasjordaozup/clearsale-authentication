@@ -1,38 +1,35 @@
 package com.teste.lucas.core.filter
 
-import br.com.iupp.middlewareauth.core.service.AuthenticateCacheService
+import com.teste.lucas.core.port.AuthenticateServicePort
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.MutableHttpRequest
 import io.micronaut.http.annotation.Filter
 import io.micronaut.http.filter.ClientFilterChain
 import io.micronaut.http.filter.HttpClientFilter
-import io.netty.util.internal.StringUtil
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
-import java.util.*
 
 @Filter
 class AuthenticateFilter(
-    private val cacheService: AuthenticateCacheService
+    private val authenticateServicePort: AuthenticateServicePort
 ): HttpClientFilter {
-    override fun doFilter(request: MutableHttpRequest<*>?, chain: ClientFilterChain?): Publisher<out HttpResponse<*>> {
 
+    override fun doFilter(request: MutableHttpRequest<*>?, chain: ClientFilterChain?): Publisher<out HttpResponse<*>> {
         var log = LoggerFactory.getLogger(AuthenticateFilter::class.toString())
+        log.info("Entrou no filtro")
 
         val skipFilter = request?.headers!!["skipFilter"]
+        log.info("Deve pular a inserção do authorization bearer token: $skipFilter")
 
-        log.info("$skipFilter")
-
+        // Se o skipFilter for true ele pula a inserção do Authorization na requisição
         if(skipFilter == null || skipFilter === "" || skipFilter === "false"){
-            var token = cacheService.readTokenAuthenticateCache()
+            var token = authenticateServicePort.authenticate()
             log.info("Token $token")
+
             if(token != null && token !== ""){
                 return chain!!.proceed(request.bearerAuth(token))
             }else{
-                // Aqui devemos chamar o service que vai chamar o /authenticate que criamos que vai bater na clearsale e vai trazer o token e o Exp
-                token = UUID.randomUUID().toString()
-                cacheService.saveTokenAuthenticateCache(token, 10000)
-                return chain!!.proceed(request.bearerAuth(token))
+                log.error("Não foi possivel gerar o token")
             }
 
         }

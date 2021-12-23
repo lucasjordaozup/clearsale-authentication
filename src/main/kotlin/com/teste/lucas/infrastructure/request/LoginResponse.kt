@@ -1,5 +1,8 @@
 package com.teste.lucas.infrastructure.request
 
+import java.util.*
+
 data class LoginResponse(
-    val message: String
+    var token: String = UUID.randomUUID().toString(),
+    var exp: Long = 15000
 )
