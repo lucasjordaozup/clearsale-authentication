@@ -1,3 +1,12 @@
 micronaut:
   application:
     name: clearsaleAuthentication
+external:
+  url: http://localhost:3000
+
+redis:
+  uri: ${redis_host:`redis://localhost`}
+  ports:
+    - 6379:6379
+  caches:
+    type: redis

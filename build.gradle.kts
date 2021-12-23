@@ -34,6 +34,9 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
     implementation("io.micronaut:micronaut-validation")
 
+    //redis module
+    implementation("io.micronaut.redis:micronaut-redis-lettuce:5.0.0")
+
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 
 }
